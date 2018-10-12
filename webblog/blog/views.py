@@ -7,14 +7,15 @@ from django.contrib.auth.decorators import login_required
 
 from .forms import ArticleForm, RegisterForm, LoginForm, EditUserForm
 
-# 主页
+
 def index(request):
 	# if request.method == 'POST':
 	# 	user = User.objects.get(username=request.user)
 	# 	title = request.POST['title']
 	# 	body = request.POST['body']
 	# 	article = Blog_Articles.objects
-	return HttpResponse('ok')
+	articleform = ArticleForm()
+	return render(request, 'blog/index.html', {'articleform': articleform})
 
 
 # 个人资料页面
