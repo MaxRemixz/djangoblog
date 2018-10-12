@@ -1,0 +1,33 @@
+{% extends "blog/base.html" %}
+{% block title %}Flasky - user{% endblock %}
+{% block page_content %}
+<div class="container">
+    <div class="page-header profile-header">
+        <a href="/edit/{{ user.username }}"><h1 class="btn btn-info">编辑个人资料</h1></a>
+            <table class="table table-hover table-bordered" style="width: 50%" border="1">
+        <caption>个人资料</caption>
+        <tbody>
+            <tr>
+                <th>用户名:{{ user.username }}</td>
+                <td rowspan="6" align="right" style="width: 200px;height: 200px"><img class="img-rounded profile-thumbnail" src="{{ user.gravatar }}"></td>
+            </tr>
+            <tr>
+                <th>性别:{% if user.gender == 1 %}男{% else %}女{% endif %}</td>
+            </tr>
+            <tr>
+                <th>生日:{% if user.birthday == None %}暂未设置{% else %}{{ user.birthday }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>地址:{% if user.adder == None %}暂未设置{% else %}{{ user.adder }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>手机:{% if user.phone == None %}暂未设置{% else %}{{ user.phone }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>邮箱:{{ user.email }}</td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+</div>
+{% endblock %}

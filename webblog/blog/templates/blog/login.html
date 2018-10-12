@@ -1,0 +1,32 @@
+{% extends "blog/base.html" %}
+
+{% block title %}Flasky - Login{% endblock %}
+
+{% block page_content %}
+<div class="container">
+<div class="col-md-offset-4">
+<h1>登录</h1>
+    <form action="login" method="post" role="form">
+        {% csrf_token %}
+        <br>
+        <div class="input-group input-group-lg">
+        <span class="input-group-addon">账号:</span>
+        <input type="text" name="username" placeholder="请输入用户名" class="form-control" style="width: 40%">
+        </div>
+        <br>
+        <div class="input-group input-group-lg">
+        <span class="input-group-addon">密码:</span>
+        <input type="password" name="password" placeholder="请输入密码" class="form-control" style="width: 40%">
+        </div>
+        <br>
+        <!-- 姓氏:
+        <input type="text" name="first_name" placeholder="请输入姓" class="form-control" style="width: 40%">
+        <br>
+        名字:
+        <input type="text" name="last_name" placeholder="请输入名" class="form-control" style="width: 40%">
+        <br> -->
+        <input type="submit" value="登录" class="btn btn-info" style="width: 10%">
+    </form>
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends "blog/base.html" %}
+
+{% block title %}Flasky - Edit{% endblock %}
+
+{% block page_content %}
+<div class="container">
+    <div class="col-md-offset-4">
+        <h1>修改个人资料</h1>
+        <form action="/edit/{{ user.username }}/" method="post" role="form">
+            {% csrf_token %}
+            <br>
+            <div class="input-group">
+                <span class="input-group-addon">邮箱:</span>
+                <input type="text" name="email" placeholder="请输入邮箱" class="form-control" style="width: 40%" value="{{ user.email }}">
+            </div>
+            <br>
+            <div class="input-group">
+                <span class="input-group-addon">地址:</span>
+                <input type="text" name="adder" placeholder="请输入地址" class="form-control" style="width: 40%" value="{{ user.adder }}">
+            </div>
+            <br>
+            <div class="input-group">
+                <span class="input-group-addon">手机:</span>
+                <input type="text" name="phone" placeholder="请输入手机" class="form-control" style="width: 40%" value="{{ user.phone }}">
+            </div>
+            <br>
+            <div class="input-group">
+                <span class="input-group-addon">生日:</span>
+                <input type="text" name="birthday" placeholder="例子:1995-10-24" class="form-control" style="width: 40%" value="{{ user.birthday|date:'Y-m-d' }}">
+            </div>
+            <br>
+            {% if user.gender == 1 %}
+            <div class="btn-group" data-toggle="buttons" style="width: 100%">
+                <label class="btn btn-primary" style="width: 22%">
+                    <input type="radio" name="gender" value="1" class="" checked="checked">男
+                </label>
+                <label class="btn btn-info" style="width: 22%">
+                    <input type="radio" name="gender" value="2" class="">女
+                </label>
+            </div>
+            {% else %}
+            <div class="btn-group" data-toggle="buttons" style="width: 100%">
+                <label class="btn btn-primary" style="width: 22%">
+                    <input type="radio" name="gender" value="1" class="">男
+                </label>
+                <label class="btn btn-info" style="width: 22%">
+                    <input type="radio" name="gender" value="2" class="" checked="checked">女
+                </label>
+            </div>
+            {% endif %}
+
+            <br><br>
+            <input type="submit" value="提交" class="btn btn-primary" style="width: 10%;margin-left: 80px;">
+{% endblock %}
