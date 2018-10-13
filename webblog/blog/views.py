@@ -9,21 +9,30 @@ from .forms import ArticleForm, RegisterForm, LoginForm, EditUserForm
 
 
 def index(request):
-	# if request.method == 'POST':
-	# 	user = User.objects.get(username=request.user)
-	# 	title = request.POST['title']
-	# 	body = request.POST['body']
-	# 	article = Blog_Articles.objects
-	articleform = ArticleForm()
-	return render(request, 'blog/index.html', {'articleform': articleform})
+	if request.method == 'POST':
+		form = ArticleForm(request.POST)
+		if form.is_valid():
+			user = User.objects.get(username=request.user)
+			title = request.POST['title']
+			body = request.POST['body']
+			article = Blog_Articles(
+				title=title, body=body, author=user
+			)
+			article.save()
+			messages.add_message(request, messages.SUCCESS, '发布成功')
+			return HttpResponseRedirect('/')
+		else:
+			messages.add_message(request, messages.WARNING, '不能为空')
+	posts = Blog_Articles.objects.all()
+	form = ArticleForm()
+	return render(request, 'blog/index.html', {'form': form, 'posts': posts})
 
 
 # 个人资料页面
 @login_required(login_url='login')
 def user(request, username):
 	user = User.objects.get(username=username)
-	img_url = user.gravatar(size=256)
-	return render(request, 'blog/user.html', {'user': user, 'img_url':img_url})
+	return render(request, 'blog/user.html', {'user': user})
 
 # 注册视图
 def new_register(request):

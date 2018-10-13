@@ -3,7 +3,9 @@
 {% block page_content %}
 <div class="container">
     <div class="page-header profile-header">
+        {% if request.user.username == user.username %}
         <a href="/edit/{{ user.username }}"><h1 class="btn btn-info">编辑个人资料</h1></a>
+        {% endif %}
             <table class="table table-hover table-bordered" style="width: 50%" border="1">
         <caption>个人资料</caption>
         <tbody>

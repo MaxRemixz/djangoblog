@@ -1,13 +1,15 @@
 {% load static %}
-<!DOCTYPE html>
+<! DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <!--     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}">
-    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}"> -->
-    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <!--<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}">-->
+    <!--<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">-->
+    <!--<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">-->
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <title>{% block title %}Flasky{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'bootstrap/css/index.css' %}">
 </head>
 
 <body>
@@ -20,7 +22,7 @@
                 </div>
                 <ul class="nav navbar-nav navbar-right">
                     {% if user.is_authenticated %}
-                    <li><a href="/user/{{ user.username }}"><span class="glyphicon glyphicon-user"></span> {{ user.username }}</a></li>
+                    <li><a href="/user/{{ request.user }}"><span class="glyphicon glyphicon-user"></span> {{ request.user }}</a></li>
                     <li><a href="/logout"><span class="glyphicon glyphicon-log-in"></span> 注销</a></li>
                     {% else %}
                     <li><a href="/register"><span class="glyphicon glyphicon-user"></span> 注册</a></li>
@@ -41,7 +43,7 @@
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
                 &times;
             </button>
-            </li>
+        </li>
             {% endfor %}
     </ul>
     {% endif %}
@@ -56,10 +58,12 @@
         document.getElementsByClassName("messages")[0].attributes[0].value = "messages alert alert-warning alert-dismissable"
     }
     </script>
-    <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
-    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <!--     <script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
-    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script> -->
+    <!--<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>-->
+    <!--<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
+    <!--<script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>-->
+    <!--<script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>-->
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </body>
 
 </html>

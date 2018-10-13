@@ -9,11 +9,29 @@
         <br>
         <input type="text" name="title" placeholder="请输入标题" class="form-control" style="width: 30%">
         <br>
-        <textarea type="text" name="body" placeholder="请输入文章主体" class="form-control" style="width: 30%">
-        </textarea>
+        <textarea type="text" name="body" placeholder="请输入文章主体 右下角可以拓展扩大" class="form-control" style="width: 30%"></textarea>
         <br>
         <input type="submit" value="提交" class="btn btn-primary">
         {% endif %}
     </form>
 </div>
+<ul class="posts">
+    {% for post in posts %}
+    <li class="post">
+        <div class="profile-thumbnail">
+            <a href="/user/{{ post.author }}">
+                <img class="img-rounded profile-thumbnail"
+                    src="{{ post.author.gravatar }}">
+            </a>
+        </div>
+        <div class="post-date">{{ post.create_time }}</div>
+        <div class="post-author">
+            <a href="/user/{{ post.author }}">
+                {{ post.author }}
+            </a>
+        </div>
+        <div class="post-body">{{ post.body }}</div>
+     </li>
+    {% endfor %}
+</ul>
 {% endblock %}
