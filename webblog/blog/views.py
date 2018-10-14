@@ -23,7 +23,7 @@ def index(request):
 			return HttpResponseRedirect('/')
 		else:
 			messages.add_message(request, messages.WARNING, '不能为空')
-	posts = Blog_Articles.objects.all()
+	posts = Blog_Articles.objects.order_by('-create_time')
 	form = ArticleForm()
 	return render(request, 'blog/index.html', {'form': form, 'posts': posts})
 

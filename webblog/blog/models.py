@@ -49,6 +49,15 @@ class User(AbstractUser):
             url=url, hash=hash, size=size, default=default, rating=rating
         )
 
+    def index_gravatar(self, size=40, default='identicon', rating='g'):
+        if HttpRequest.is_secure:
+            url = 'https://secure.gravatar.com/avatar'
+        else:
+            url = 'http://www.gravatar.com/avatar'
+        hash = self.avatar_hash or self.gravatar_hash()
+        return '{url}/{hash}?s={size}&d={default}&r={rating}'.format(
+            url=url, hash=hash, size=size, default=default, rating=rating
+        )
 
 
 class Blog_Articles(models.Model):
