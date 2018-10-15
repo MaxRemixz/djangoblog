@@ -32,7 +32,8 @@ def index(request):
 @login_required(login_url='login')
 def user(request, username):
 	user = User.objects.get(username=username)
-	return render(request, 'blog/user.html', {'user': user})
+	posts = Blog_Articles.objects.filter(author=user)
+	return render(request, 'blog/user.html', {'user': user,'posts':posts})
 
 # 注册视图
 def new_register(request):
