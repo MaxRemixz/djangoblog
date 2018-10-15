@@ -4,6 +4,7 @@ from django.contrib import messages
 from .models import User, Blog_Articles
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from .forms import ArticleForm, RegisterForm, LoginForm, EditUserForm
 
@@ -24,8 +25,16 @@ def index(request):
 		else:
 			messages.add_message(request, messages.WARNING, '不能为空')
 	posts = Blog_Articles.objects.order_by('-create_time')
+	paginator = Paginator(posts, 20)
+	page = request.GET.get('page')
+	try:
+		customer = paginator.page(page)
+	except PageNotAnInteger:
+		customer = paginator.page(1)
+	except EmptyPage:
+		customer = paginator.page(paginator.num_pages)
 	form = ArticleForm()
-	return render(request, 'blog/index.html', {'form': form, 'posts': posts})
+	return render(request, 'blog/index.html', {'form': form, 'customer': customer})
 
 
 # 个人资料页面
