@@ -37,7 +37,7 @@
 
 <div class="pagination">
     <ul class="pagination">
-        <li{% if not contacts.has_previous %} class="disable"{% endif %}>
+        <li{% if not contacts.has_previous %} class="disabled"{% endif %}>
             <a href="{% if contacts.has_previous %}?page={{ contacts.previous_page_number }}{% else %}#{% endif %}">
                 &laquo;
             </a>
