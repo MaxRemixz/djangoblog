@@ -28,13 +28,13 @@ def index(request):
 	paginator = Paginator(posts, 20)
 	page = request.GET.get('page')
 	try:
-		customer = paginator.page(page)
-	except PageNotAnInteger:
-		customer = paginator.page(1)
-	except EmptyPage:
-		customer = paginator.page(paginator.num_pages)
+		contacts = paginator.page(page)
+	except PageNotAnInteger:  # 如果page不是有一个有效的数字。则跳转到第一页
+		contacts = paginator.page(1)
+	except EmptyPage:		# 如果page超过了最大或者最小范围。则跳转到最后一页
+		contacts = paginator.page(paginator.num_pages)
 	form = ArticleForm()
-	return render(request, 'blog/index.html', {'form': form, 'customer': customer})
+	return render(request, 'blog/index.html', {'form': form, 'contacts': contacts})
 
 
 # 个人资料页面

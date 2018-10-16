@@ -16,22 +16,53 @@
         {% endif %}
     </form>
 <ul class="posts">
-    {% for post in posts %}
+    {% for contact in contacts %}
     <li class="post">
         <div class="profile-thumbnail">
-            <a href="/user/{{ post.author }}">
+            <a href="/user/{{ contact.author }}">
                 <img class="img-rounded profile-thumbnail"
-                    src="{{ post.author.index_gravatar }}">
+                    src="{{ contact.author.index_gravatar }}">
             </a>
         </div>
-        <div class="post-date">{{ post.create_time }}</div>
+        <div class="post-date">{{ contact.create_time }}</div>
         <div class="post-author">
-            <a href="/user/{{ post.author }}">
-                {{ post.author }}
+            <a href="/user/{{ contact.author }}">
+                {{ contact.author }}
             </a>
         </div>
-        <div class="post-body">{{ post.body }}</div>
+        <div class="post-body">{{ contact.body }}</div>
      </li>
     {% endfor %}
 </ul>
+
+<div class="pagination">
+    <ul class="pagination">
+        <li{% if not contacts.has_previous %} class="disable"{% endif %}>
+            <a href="{% if contacts.has_previous %}?page={{ contacts.previous_page_number }}{% else %}#{% endif %}">
+                &laquo;
+            </a>
+        </li>
+
+        {% for p in contacts.paginator.page_range %}
+            {% if p %}
+                {% if p == contacts.number %}
+                <li class="active">
+                    <a href="?page={{ p }}">{{ p }}</a>
+                </li>
+                {% else %}
+                <li>
+                    <a href="?page={{ p }}">{{ p }}</a>
+                </li>
+                {% endif %}
+            {% else %}
+            <li class="disabled"><a href="#">&hellip;</a></li>
+            {% endif %}
+        {% endfor %}
+
+        <li{% if not contacts.has_next %} class="disabled"{% endif %}>
+            <a href="{% if contacts.has_next %}?page={{ contacts.next_page_number }}
+            {% else %}#{% endif %}">&raquo;</a>
+        </li>
+    </ul>
+</div>
 {% endblock %}
