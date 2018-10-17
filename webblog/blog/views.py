@@ -145,3 +145,14 @@ def post(request, id):
 		# raise Http404 等完善了404页面再用这个页面
 		return HttpResponseRedirect('/')
 	return render(request, 'blog/post.html', {'post':post})
+
+
+# 自定义错误页面
+def page_not_found(request):
+	return render(request, 'blog/404.html')
+
+def page_error(request):
+	return render(request, 'blog/500.html')
+
+def permission_denied(request):
+	return render(request, 'blog/403.html')

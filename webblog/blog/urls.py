@@ -1,5 +1,11 @@
 from django.urls import path
 from . import views
+from django.conf.urls import handler403, handler404, handler500
+
+# 定义错误跳转页面 settings中需修改DEBUG = False ALLOWED_HOSTS = ['127.0.0.1', 'localhost']或者ALLOWED_HOSTS = ['*']
+handler403 = views.permission_denied
+handler404 = views.page_not_found
+handler500 = views.page_error
 
 urlpatterns = [
 	path('', views.index, name='index'),
