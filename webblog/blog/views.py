@@ -1,14 +1,16 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib import messages
-from .models import User, Blog_Articles
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.shortcuts import get_object_or_404
 
 from .forms import ArticleForm, RegisterForm, LoginForm, EditUserForm
+from .models import User, Blog_Articles
 
 
+# 首页
 def index(request):
 	if request.method == 'POST':
 		form = ArticleForm(request.POST)
@@ -107,7 +109,7 @@ def new_login(request):
 def new_logout(request):
 	messages.add_message(request, messages.WARNING, '注销成功!')
 	logout(request)
-	return render(request, 'blog/index.html')
+	return HttpResponseRedirect('/')
 
 # 编辑个人资料
 @login_required(login_url='login')
@@ -131,3 +133,15 @@ def edit_username(request, username):
 	else:
 		form = EditUserForm()
 		return render(request, 'blog/edit.html', {'form':form})
+
+
+# 单文章页面
+@login_required(login_url='login')
+def post(request, id):
+	try:
+		post = get_object_or_404(Blog_Articles, id=id)
+	except:
+		messages.add_message(request, messages.ERROR, '文章不存在！')
+		# raise Http404 等完善了404页面再用这个页面
+		return HttpResponseRedirect('/')
+	return render(request, 'blog/post.html', {'post':post})

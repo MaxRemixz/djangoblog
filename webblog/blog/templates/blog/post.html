@@ -1,0 +1,23 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}Flasky - Post{% endblock %}
+
+{% block page_content %}
+<ul class="posts">
+    <li class="post">
+        <div class="profile-thumbnail">
+            <a href="/user/{{ post.author }}">
+                <img class="img-rounded profile-thumbnail"
+                    src="{{ post.author.index_gravatar }}">
+            </a>
+        </div>
+        <div class="post-date">{{ post.create_time }}</div>
+        <div class="post-author">
+            <a href="/user/{{ post.author }}">
+                {{ post.author }}
+            </a>
+        </div>
+        <div class="post-body">{{ post.body }}</div>
+     </li>
+</ul>
+{% endblock %}

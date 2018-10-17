@@ -31,6 +31,12 @@
             </a>
         </div>
         <div class="post-body">{{ contact.body }}</div>
+        <div class="post-footer">
+            <a href="/post/{{ contact.id }}">
+                <span class="label label-default pull-right">Permalink</span>
+                <div class="clearfix"></div>
+            </a>
+        </div>
      </li>
     {% endfor %}
 </ul>
