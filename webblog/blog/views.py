@@ -117,7 +117,6 @@ def edit_username(request, username):
 	user = User.objects.get(username=username)
 	if request.method == 'POST':
 		form = EditUserForm(request.POST)
-		print(type(request.POST['birthday']))
 		if form.is_valid():
 			user.email = request.POST['email']
 			user.adder = request.POST['adder']
@@ -156,3 +155,30 @@ def page_error(request):
 
 def permission_denied(request):
 	return render(request, 'blog/403.html')
+
+
+# 编辑文章
+@login_required(login_url='login')
+def edit_post(request, id):
+	try:
+		post = get_object_or_404(Blog_Articles, id=id)
+	except:
+		messages.add_message(request, messages.ERROR, '文章不存在！')
+	if request.user == post.author or request.user.is_superuser:
+		if request.method == 'POST':
+			form = ArticleForm(request.POST)
+			if form.is_valid():
+				post.title = request.POST['title']
+				post.body = request.POST['body']
+				post.save()
+				messages.add_message(request, messages.SUCCESS, '修改成功！')
+				return HttpResponseRedirect('/post/{}'.format(id))
+			else:
+				messages.add_message(request, messages.WARNING, '请检查一下各项的输入！')
+				return render(request, 'blog/edit_post.html', {'form':form, 'post':post})
+		else:
+			form = ArticleForm()
+			return render(request, 'blog/edit_post.html', {'form':form, 'post':post})
+	else:
+		messages.add_message(request, messages.WARNING, '暂无权限修改此文章')
+		return HttpResponseRedirect('/')

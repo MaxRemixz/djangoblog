@@ -3,7 +3,7 @@
 {% block page_content %}
 <div class="container">
     <div class="page-header">
-        {% if request.user.username == user.username %}
+        {% if request.user.username == user.username or request.user.is_superuser %}
         <a href="/edit/{{ user.username }}"><h1 class="btn btn-info">编辑个人资料</h1></a>
         {% endif %}
             <table class="table table-hover table-bordered" style="width: 50%" border="1">
@@ -48,6 +48,22 @@
             </a>
         </div>
         <div class="post-body">{{ post.body }}</div>
+        <div class="post-footer">
+            {% if request.user == post.author %}
+            <a href="/edit/{{ post.id }}">
+                <span class="label label-primary pull-right" style="margin-left: 5px">Edit</span>
+            </a>
+            {% elif request.user.is_superuser %}
+            <a href="/edit/{{ post.id }}">
+                <span class="label label-danger pull-right">Edit [Admin]</span>
+            </a>
+            <br>
+            {% endif %}
+            <a href="/post/{{ post.id }}">
+                <span class="label label-default pull-right">Permalink</span>
+                <div class="clearfix"></div>
+            </a>
+        </div>
      </li>
     {% endfor %}
 </ul>

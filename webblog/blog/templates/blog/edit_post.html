@@ -1,0 +1,24 @@
+{% extends "blog/base.html" %}
+
+{% block title %}Edit - Post{% endblock %}
+
+{% block page_content %}
+<div class="container">
+		<h1>修改文章</h1>
+		<form action="/edit/{{ post.id }}" method="post" role="form">
+			{% csrf_token %}
+			<br>
+			<div class="input-group">
+                <span class="input-group-addon">标题:</span>
+                <input type="text" name="title" placeholder="请输入标题" class="form-control" style="width: 40%" value="{{ post.title }}">
+            </div>
+            <br>
+            <div class="input-group">
+                <span class="input-group-addon">内容:</span>
+                <textarea class="form-control" name="body" cols="30" rows="10" placeholder="请输入文章主体" >{{ post.body }}</textarea>
+            </div>
+            <br><br>
+            <input type="submit" value="提交" class="btn btn-primary" style="width: 10%">
+		</form>
+</div>
+{% endblock %}
