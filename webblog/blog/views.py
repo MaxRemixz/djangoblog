@@ -116,22 +116,26 @@ def new_logout(request):
 def edit_username(request, username):
 	user = User.objects.get(username=username)
 	if request.method == 'POST':
-		form = EditUserForm(request.POST)
-		if form.is_valid():
-			user.email = request.POST['email']
-			user.adder = request.POST['adder']
-			user.phone = request.POST['phone']
-			user.birthday = request.POST['birthday']
-			user.gender = request.POST['gender']
-			user.save()
-			messages.add_message(request, messages.SUCCESS, '修改成功！')
-			return HttpResponseRedirect('/user/{}/'.format(user.username))
+		if request.user == user.username or request.user.is_superuser:
+			form = EditUserForm(request.POST)
+			if form.is_valid():
+				user.email = request.POST['email']
+				user.adder = request.POST['adder']
+				user.phone = request.POST['phone']
+				user.birthday = request.POST['birthday']
+				user.gender = request.POST['gender']
+				user.save()
+				messages.add_message(request, messages.SUCCESS, '修改成功！')
+				return HttpResponseRedirect('/user/{}/'.format(user.username))
+			else:
+				messages.add_message(request, messages.WARNING, '请检查一下各项的输入！')
+				return render(request, 'blog/edit.html', {'form':form})
 		else:
-			messages.add_message(request, messages.WARNING, '请检查一下各项的输入！')
-			return render(request, 'blog/edit.html', {'form':form})
+			messages.add_message(request, messages.WARNING, '暂无权限修改此文章')
+			return HttpResponseRedirect('/')
 	else:
 		form = EditUserForm()
-		return render(request, 'blog/edit.html', {'form':form})
+		return render(request, 'blog/edit.html', {'form':form, 'user':user})
 
 
 # 单文章页面
