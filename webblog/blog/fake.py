@@ -8,15 +8,13 @@ from django.db import IntegrityError, transaction
 #用于生成测试用户
 @transaction.atomic
 def users(count=100):
-	fake = Faker()
+	fake = Faker(locale='zh_CN')
 	i = 0
 	while i < count:
-		u = User(email=fake.email(),
-			username=fake.user_name(),
-			password='password',
-			adder=fake.city(),
-			phone=fake.phone_number(),
-			birthday=fake.date_object())
+		u = User.objects.create_user(fake.user_name(), fake.email(), 'password')
+		u.adder = fake.address() 
+		u.phone = fake.phone_number()
+		u.birthday = fake.date_object()
 		try:
 			u.save()
 			i += 1
