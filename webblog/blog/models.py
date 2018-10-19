@@ -59,6 +59,37 @@ class User(AbstractUser):
             url=url, hash=hash, size=size, default=default, rating=rating
         )
 
+    # 关注相关的方法
+    def follow(self, user):
+        if not self.is_following(user):
+            f = FriendShip(follower=self, followed=user)
+            f.save()
+
+    def unfollow(self, user):
+        try:
+            f = FriendShip.objects.get(follower=self, followed=user)
+        except:
+            return None
+        if f:
+            f.delete()
+
+    def is_following(self, user):
+        if user.id is None:
+            return False
+        try:
+            f = FriendShip.objects.get(follower=user, followed=self)
+        except:
+            return False
+        return True
+
+    def is_followed_by(self, user):
+        if user.id is None:
+            return False
+        try:
+            f = FriendShip.objects.get(follower=self, followed=user)
+        except:
+            return False
+        return True
 
 class Blog_Articles(models.Model):
     title = models.CharField(max_length=80, blank=False, verbose_name='标题')
@@ -73,3 +104,9 @@ class Blog_Articles(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class FriendShip(models.Model):
+    followed = models.ForeignKey(User, related_name='followed', verbose_name='关注', on_delete=models.CASCADE)
+    follower = models.ForeignKey(User, related_name='follower', verbose_name='粉丝', on_delete=models.CASCADE)
+    objects = models.Manager()

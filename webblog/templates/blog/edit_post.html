@@ -6,7 +6,7 @@
 <div class="container">
 		<h1>修改文章</h1>
 		<form action="/edit/{{ post.id }}" method="post" role="form">
-			{% csrf_token %}
+			{{ csrf_input }}
 			<br>
 			<div class="input-group">
                 <span class="input-group-addon">标题:</span>

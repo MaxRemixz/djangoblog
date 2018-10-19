@@ -1,0 +1,87 @@
+{% extends "blog/base.html" %}
+{% block title %}Flasky - user{% endblock %}
+{% block page_content %}
+<div class="container">
+    <div class="page-header">
+        {% if user.username == user_datas.username or request.user.is_superuser %}
+        <a href="/edit/{{ user_datas.username }}"><h1 class="btn btn-info">编辑个人资料</h1></a>
+        {% endif %}
+        <table class="table table-hover table-bordered" style="width: 50%" border="1">
+            <caption>个人资料</caption>
+            <tbody>
+                <tr>
+                    <th>用户名:{{ user_datas.username }}</td>
+                    <td rowspan="6" align="right" style="width: 200px;height: 200px"><img class="img-rounded" src="{{ user_datas.gravatar() }}"></td>
+                </tr>
+                <tr>
+                    <th>性别:{% if user_datas.gender == 1 %}男{% else %}女{% endif %}</td>
+                </tr>
+                <tr>
+                    <th>生日:{% if user_datas.birthday == None %}暂未设置{% else %}{{ user_datas.birthday }}{% endif %}</td>
+                </tr>
+                <tr>
+                    <th>地址:{% if user_datas.adder == None %}暂未设置{% else %}{{ user_datas.adder }}{% endif %}</td>
+                </tr>
+                <tr>
+                    <th>手机:{% if user_datas.phone == None %}暂未设置{% else %}{{ user_datas.phone }}{% endif %}</td>
+                </tr>
+                <tr>
+                    <th>邮箱:{{ user_datas.email }}</td>
+                </tr>
+            </tbody>
+        </table>
+        {% if user.username != user_datas.username %}
+            {% if not user.is_following(user_datas) %}
+            <a href="/follow/{{ user_datas.username }}" class="btn btn-primary">关注</a>
+            {% else %}
+            <a href="/unfollow/{{ user_datas.username }}" class="btn btn-default">取消关注</a>
+            {% endif %}
+        {% endif %}
+        <a href="/followers/{{ user_datas.username }}" style="padding-left: 10px;">
+            关注： <span class="badge">{{ user_datas.follower.count() }}</span>
+        </a>
+        <a href="/followed_by/{{ user_datas.username }}" style="padding-left: 10px;">
+            粉丝： <span class="badge">{{ user_datas.followed.count() }}</span>
+        </a>
+        {% if user.is_authentcated and user.username != user_datas.username and
+        user.is_following(user_data) %}
+        | <span class="label label-default">关注中</span>
+        {% endif %}
+    </div>
+    <ul class="posts">
+        {% for post in posts %}
+        <li class="post">
+            <div class="profile-thumbnail">
+                <a href="/user/{{ post.author }}">
+                <img class="img-rounded profile-thumbnail"
+                    src="{{ post.author.gravatar(size=40) }}">
+            </a>
+            </div>
+            <div class="post-date">{{ post.create_time }}</div>
+            <div class="post-author">
+                <a href="/user/{{ post.author }}">
+                {{ post.author }}
+            </a>
+            </div>
+            <div class="post-body">{{ post.body }}</div>
+            <div class="post-footer">
+                {% if request.user == post.author %}
+                <a href="/edit/{{ post.id }}">
+                <span class="label label-primary pull-right" style="margin-left: 5px">Edit</span>
+            </a>
+                {% elif request.user.is_superuser %}
+                <a href="/edit/{{ post.id }}">
+                <span class="label label-danger pull-right">Edit [Admin]</span>
+            </a>
+                <br>
+                {% endif %}
+                <a href="/post/{{ post.id }}">
+                <span class="label label-default pull-right">Permalink</span>
+                <div class="clearfix"></div>
+            </a>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

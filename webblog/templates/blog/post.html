@@ -8,7 +8,7 @@
         <div class="profile-thumbnail">
             <a href="/user/{{ post.author }}">
                 <img class="img-rounded profile-thumbnail"
-                    src="{{ post.author.index_gravatar }}">
+                    src="{{ post.author.gravatar(size=40) }}">
             </a>
         </div>
         <div class="post-date">{{ post.create_time }}</div>

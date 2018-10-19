@@ -5,12 +5,12 @@
     <h1>Hello {% if user.is_authenticated %}{{ user.username }}{% else %}world{% endif %}</h1>
 </div>
     <form action="/" method="post" role="form">
-        {% csrf_token %}
+        {{ csrf_input }}
         {% if user.is_authenticated %}
         <br>
         <input type="text" name="title" placeholder="请输入标题" class="form-control" style="width: 30%">
         <br>
-        <textarea type="text" name="body" placeholder="请输入文章主体 右下角可以拓展扩大" class="form-control" style="width: 50%;height: 30%;"></textarea>
+        <textarea type="text" name="body" placeholder="请输入文章主体 右下角可以拓展扩大" class="form-control" style="height: 80%;"></textarea>
         <br>
         <input type="submit" value="提交" class="btn btn-primary">
         {% endif %}
@@ -21,7 +21,7 @@
         <div class="profile-thumbnail">
             <a href="/user/{{ contact.author }}">
                 <img class="img-rounded profile-thumbnail"
-                    src="{{ contact.author.index_gravatar }}">
+                    src="{{ contact.author.gravatar(size=40) }}">
             </a>
         </div>
         <div class="post-date">{{ contact.create_time }}</div>
@@ -53,8 +53,8 @@
 
 <div class="pagination">
     <ul class="pagination">
-        <li{% if not contacts.has_previous %} class="disabled"{% endif %}>
-            <a href="{% if contacts.has_previous %}?page={{ contacts.previous_page_number }}{% else %}#{% endif %}">
+        <li{% if not contacts.has_previous() %} class="disabled"{% endif %}>
+            <a href="{% if contacts.has_previous() %}?page={{ contacts.previous_page_number }}{% else %}#{% endif %}">
                 &laquo;
             </a>
         </li>
@@ -75,8 +75,8 @@
             {% endif %}
         {% endfor %}
 
-        <li{% if not contacts.has_next %} class="disabled"{% endif %}>
-            <a href="{% if contacts.has_next %}?page={{ contacts.next_page_number }}
+        <li{% if not contacts.has_next() %} class="disabled"{% endif %}>
+            <a href="{% if contacts.has_next() %}?page={{ contacts.next_page_number }}
             {% else %}#{% endif %}">&raquo;</a>
         </li>
     </ul>

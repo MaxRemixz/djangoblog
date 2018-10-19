@@ -6,30 +6,30 @@
 <div class="container">
     <div class="col-md-offset-4">
         <h1>修改个人资料</h1>
-        <form action="/edit/{{ user.username }}/" method="post" role="form">
-            {% csrf_token %}
+        <form action="/edit/{{ user_datas.username }}/" method="post" role="form">
+            {{ csrf_input }}
             <br>
             <div class="input-group">
                 <span class="input-group-addon">邮箱:</span>
-                <input type="text" name="email" placeholder="请输入邮箱" class="form-control" style="width: 40%" value="{{ user.email }}">
+                <input type="text" name="email" placeholder="请输入邮箱" class="form-control" style="width: 40%" value="{{ user_datas.email }}">
             </div>
             <br>
             <div class="input-group">
                 <span class="input-group-addon">地址:</span>
-                <input type="text" name="adder" placeholder="请输入地址" class="form-control" style="width: 40%" value="{{ user.adder }}">
+                <input type="text" name="adder" placeholder="请输入地址" class="form-control" style="width: 40%" value="{{ user_datas.adder }}">
             </div>
             <br>
             <div class="input-group">
                 <span class="input-group-addon">手机:</span>
-                <input type="text" name="phone" placeholder="请输入手机" class="form-control" style="width: 40%" value="{{ user.phone }}">
+                <input type="text" name="phone" placeholder="请输入手机" class="form-control" style="width: 40%" value="{{ user_datas.phone }}">
             </div>
             <br>
             <div class="input-group">
                 <span class="input-group-addon">生日:</span>
-                <input type="text" name="birthday" placeholder="例子:1995-10-24" class="form-control" style="width: 40%" value="{{ user.birthday|date:'Y-m-d' }}">
+                <input type="text" name="birthday" placeholder="例子:1995-10-24" class="form-control" style="width: 40%" value="{{ user_datas.birthday }}">
             </div>
             <br>
-            {% if user.gender == 1 %}
+            {% if user_datas.gender == 1 %}
             <div class="btn-group" data-toggle="buttons" style="width: 100%">
                 <label class="btn btn-primary" style="width: 22%">
                     <input type="radio" name="gender" value="1" class="" checked="checked">男

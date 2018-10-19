@@ -42,9 +42,9 @@ def index(request):
 # 个人资料页面
 @login_required(login_url='login')
 def user(request, username):
-	user = User.objects.get(username=username)
-	posts = Blog_Articles.objects.filter(author=user)
-	return render(request, 'blog/user.html', {'user': user,'posts':posts})
+	user_datas = User.objects.get(username=username)
+	posts = Blog_Articles.objects.filter(author=user_datas)
+	return render(request, 'blog/user.html', {'user_datas': user_datas,'posts':posts})
 
 # 注册视图
 def new_register(request):
@@ -114,19 +114,19 @@ def new_logout(request):
 # 编辑个人资料
 @login_required(login_url='login')
 def edit_username(request, username):
-	user = User.objects.get(username=username)
+	user_datas = User.objects.get(username=username)
 	if request.method == 'POST':
-		if request.user == user.username or request.user.is_superuser:
+		if request.user == user_datas.username or request.user.is_superuser:
 			form = EditUserForm(request.POST)
 			if form.is_valid():
-				user.email = request.POST['email']
-				user.adder = request.POST['adder']
-				user.phone = request.POST['phone']
-				user.birthday = request.POST['birthday']
-				user.gender = request.POST['gender']
-				user.save()
+				user_datas.email = request.POST['email']
+				user_datas.adder = request.POST['adder']
+				user_datas.phone = request.POST['phone']
+				user_datas.birthday = request.POST['birthday']
+				user_datas.gender = request.POST['gender']
+				user_datas.save()
 				messages.add_message(request, messages.SUCCESS, '修改成功！')
-				return HttpResponseRedirect('/user/{}/'.format(user.username))
+				return HttpResponseRedirect('/user/{}/'.format(user_datas.username))
 			else:
 				messages.add_message(request, messages.WARNING, '请检查一下各项的输入！')
 				return render(request, 'blog/edit.html', {'form':form})
@@ -135,7 +135,7 @@ def edit_username(request, username):
 			return HttpResponseRedirect('/')
 	else:
 		form = EditUserForm()
-		return render(request, 'blog/edit.html', {'form':form, 'user':user})
+		return render(request, 'blog/edit.html', {'form':form, 'user_datas':user_datas})
 
 
 # 单文章页面
@@ -186,3 +186,17 @@ def edit_post(request, id):
 	else:
 		messages.add_message(request, messages.WARNING, '暂无权限修改此文章')
 		return HttpResponseRedirect('/')
+
+
+@login_required(login_url='login')
+def follow(request, username):
+	try:
+		user = User.objects.get(username=username)
+	except:
+		messages.add_message(request, messages.ERROR, '错误的用户')
+		return HttpResponseRedirect('/')
+	if request.user.is_following(user):
+		messages.add_message(request, messages.WARNING, '您已经关注此用户')
+	request.user.follow(user)
+	messages.add_message(request, messages.SUCCESS, '您已经成功关注了用户{}'.format(user.username))
+	return HttpResponseRedirect('/user/{}'.format(user.username))
