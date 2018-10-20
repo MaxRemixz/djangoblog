@@ -1,0 +1,25 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}Followed{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>{{ user_fol.username }}</h1>
+</div>
+<table class="table table-hover followers">
+    <thead><tr><th>User</th><th>Since</th></tr></thead>
+    {% for i in followed %}
+    {% if i.follower != user_fol.follower %}
+    <tr>
+        <td>
+            <a href="/user/{}".format(i.follower.username)>
+                <img src="{{ i.follower.gravatar(size=32) }}" alt="头像" class="img-rounded">
+                {{ i.follower.username }}
+            </a>
+        </td>
+        <!--<td>时间暂时未实现</td>-->
+    </tr>
+    {% endif %}
+    {% endfor %}
+</table>
+{% endblock %}

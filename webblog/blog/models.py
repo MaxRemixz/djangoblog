@@ -108,6 +108,6 @@ class Blog_Articles(models.Model):
 
 
 class FriendShip(models.Model):
-    followed = models.ForeignKey(User, related_name='followed', verbose_name='关注', on_delete=models.CASCADE)
-    follower = models.ForeignKey(User, related_name='follower', verbose_name='粉丝', on_delete=models.CASCADE)
+    followed = models.ForeignKey(User, related_name='followed', verbose_name='粉丝', on_delete=models.CASCADE)
+    follower = models.ForeignKey(User, related_name='follower', verbose_name='关注', on_delete=models.CASCADE)
     objects = models.Manager()

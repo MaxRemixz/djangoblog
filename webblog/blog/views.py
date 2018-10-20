@@ -7,7 +7,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import get_object_or_404
 
 from .forms import ArticleForm, RegisterForm, LoginForm, EditUserForm
-from .models import User, Blog_Articles
+from .models import User, Blog_Articles, FriendShip
 
 
 # 首页
@@ -210,7 +210,7 @@ def unfollow(request, username):
 	try:
 		user = User.objects.get(username=username)
 	except:
-		messages.add_message(request, messages.ERROR, '错误的用户')
+		messages.add_message(request, messages.ERROR, '您所查看的用户不存在')
 		return HttpResponseRedirect('/')
 	if not request.user.is_following(user):
 		messages.add_message(request, messages.WARNING, '取消无效。您并没有关注此用户')
@@ -218,3 +218,25 @@ def unfollow(request, username):
 	request.user.unfollow(user)
 	messages.add_message(request, messages.WARNING, '您已经取消关注了用户{}'.format(user.username))
 	return HttpResponseRedirect('/user/{}'.format(user.username))
+
+
+# 查看用户关注者的视图
+def followers(request, username):
+	try:
+		user = User.objects.get(username=username)
+	except:
+		messages.add_message(request, messages.ERROR, '您所查看的用户不存在')
+		return HttpResponseRedirect('/')
+	followers = FriendShip.objects.filter(follower=user)
+	return render(request, 'blog/followers.html', {'followers': followers, 'user_fol': user})
+
+
+# 查看用户粉丝的视图
+def followed(request, username):
+	try:
+		user = User.objects.get(username=username)
+	except:
+		messages.add_message(request, messages.ERROR, '您所查用的用户不存在')
+		return HttpResponseRedirect('/')
+	followed  = FriendShip.objects.filter(followed=user)
+	return render(request, 'blog/followed.html', {'followed': followed, 'user_fol': user})
