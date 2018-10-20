@@ -46,6 +46,7 @@ def user(request, username):
 	posts = Blog_Articles.objects.filter(author=user_datas)
 	return render(request, 'blog/user.html', {'user_datas': user_datas,'posts':posts})
 
+
 # 注册视图
 def new_register(request):
 	if request.method == 'POST':
@@ -64,8 +65,6 @@ def new_register(request):
 				user.phone = request.POST['phone']
 				user.birthday = request.POST['birthday']
 				user.gender = request.POST['gender']
-				#user.first_name = first_name
-				#user.last_name = last_name
 				user.save()
 				messages.add_message(request, messages.SUCCESS, '创建用户成功!')
 				return HttpResponseRedirect('/') # 正常都是要跳转到登录
@@ -110,6 +109,7 @@ def new_logout(request):
 	messages.add_message(request, messages.WARNING, '注销成功!')
 	logout(request)
 	return HttpResponseRedirect('/')
+
 
 # 编辑个人资料
 @login_required(login_url='login')
@@ -188,6 +188,7 @@ def edit_post(request, id):
 		return HttpResponseRedirect('/')
 
 
+# 点击关注之后的视图函数
 @login_required(login_url='login')
 def follow(request, username):
 	try:
@@ -196,7 +197,24 @@ def follow(request, username):
 		messages.add_message(request, messages.ERROR, '错误的用户')
 		return HttpResponseRedirect('/')
 	if request.user.is_following(user):
-		messages.add_message(request, messages.WARNING, '您已经关注此用户')
+		messages.add_message(request, messages.WARNING, '您已经关注过此用户')
+		return HttpResponseRedirect('/user/{}'.format(user.username))
 	request.user.follow(user)
 	messages.add_message(request, messages.SUCCESS, '您已经成功关注了用户{}'.format(user.username))
+	return HttpResponseRedirect('/user/{}'.format(user.username))
+
+
+# 点击取消关注的试图函数
+@login_required(login_url='login')
+def unfollow(request, username):
+	try:
+		user = User.objects.get(username=username)
+	except:
+		messages.add_message(request, messages.ERROR, '错误的用户')
+		return HttpResponseRedirect('/')
+	if not request.user.is_following(user):
+		messages.add_message(request, messages.WARNING, '取消无效。您并没有关注此用户')
+		return HttpResponseRedirect('/user/{}'.format(user.username))
+	request.user.unfollow(user)
+	messages.add_message(request, messages.WARNING, '您已经取消关注了用户{}'.format(user.username))
 	return HttpResponseRedirect('/user/{}'.format(user.username))

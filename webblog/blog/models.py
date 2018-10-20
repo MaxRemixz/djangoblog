@@ -77,7 +77,7 @@ class User(AbstractUser):
         if user.id is None:
             return False
         try:
-            f = FriendShip.objects.get(follower=user, followed=self)
+            f = FriendShip.objects.get(follower=self, followed=user)
         except:
             return False
         return True
@@ -90,6 +90,7 @@ class User(AbstractUser):
         except:
             return False
         return True
+
 
 class Blog_Articles(models.Model):
     title = models.CharField(max_length=80, blank=False, verbose_name='标题')
