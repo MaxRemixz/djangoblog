@@ -95,7 +95,7 @@ class User(AbstractUser):
 class Blog_Articles(models.Model):
     title = models.CharField(max_length=80, blank=False, verbose_name='标题')
     body = models.TextField(blank=False, verbose_name='内容')
-    create_time = models.DateTimeField(default=datetime.now, verbose_name='创建时间')
+    create_time = models.DateTimeField(default=datetime.now().strftime("%Y-%m-%d %H:%I:%S"), verbose_name='创建时间')
     author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='作者')
     objects = models.Manager()
 
@@ -110,4 +110,5 @@ class Blog_Articles(models.Model):
 class FriendShip(models.Model):
     followed = models.ForeignKey(User, related_name='followed', verbose_name='粉丝', on_delete=models.CASCADE)
     follower = models.ForeignKey(User, related_name='follower', verbose_name='关注', on_delete=models.CASCADE)
+    create_time = models.DateTimeField(default=datetime.now().strftime("%Y-%m-%d %H:%I:%S"), verbose_name='创建时间')
     objects = models.Manager()

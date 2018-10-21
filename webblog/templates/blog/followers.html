@@ -12,12 +12,12 @@
     {% if i.followed != user_fol.followed %}
     <tr>
         <td>
-            <a href="/user/{}".format(i.followed.username)>
+            <a href="/user/{{ i.followed.username }}">
                 <img src="{{ i.followed.gravatar(size=32) }}" alt="头像" class="img-rounded">
                 {{ i.followed.username }}
             </a>
         </td>
-        <!--<td>时间暂时未实现</td>-->
+        <td>{{ i.create_time }}</td>
     </tr>
     {% endif %}
     {% endfor %}
