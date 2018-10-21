@@ -227,7 +227,7 @@ def followers(request, username):
 	except:
 		messages.add_message(request, messages.ERROR, '您所查看的用户不存在')
 		return HttpResponseRedirect('/')
-	followers = FriendShip.objects.filter(follower=user)
+	followers = FriendShip.objects.filter(follower=user).order_by('-create_time')
 	return render(request, 'blog/followers.html', {'followers': followers, 'user_fol': user})
 
 
@@ -238,5 +238,5 @@ def followed(request, username):
 	except:
 		messages.add_message(request, messages.ERROR, '您所查用的用户不存在')
 		return HttpResponseRedirect('/')
-	followed  = FriendShip.objects.filter(followed=user)
+	followed  = FriendShip.objects.filter(followed=user).order_by('-create_time')
 	return render(request, 'blog/followed.html', {'followed': followed, 'user_fol': user})
