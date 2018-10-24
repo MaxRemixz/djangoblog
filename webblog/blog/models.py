@@ -91,6 +91,12 @@ class User(AbstractUser):
             return False
         return True
 
+    # 获取所关注用户的文章
+    @property
+    def followed_posts(self):
+        user = FriendShip.objects.filter(follower=self).values_list('followed_id')
+        return Blog_Articles.objects.filter(author_id__in=user)
+
 
 class Blog_Articles(models.Model):
     title = models.CharField(max_length=80, blank=False, verbose_name='标题')

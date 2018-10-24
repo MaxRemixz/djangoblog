@@ -15,6 +15,17 @@
         <input type="submit" value="提交" class="btn btn-primary">
         {% endif %}
     </form>
+<div class="post-tabs">
+    <ul class="nav nav-tabs">
+        <li{% if not show_followed %} class="active"{% endif %}>
+            <a href="/all">All</a>
+        </li>
+        {% if request.user.is_authenticated %}
+        <li{% if show_followed %} class="active"{% endif %}>
+            <a href="/followed">Followers</a>
+        </li>
+        {% endif %}
+    </ul>
 <ul class="posts">
     {% for contact in contacts %}
     <li class="post">
@@ -50,6 +61,7 @@
      </li>
     {% endfor %}
 </ul>
+</div>
 
 <div class="pagination">
     <ul class="pagination">

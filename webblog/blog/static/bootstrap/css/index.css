@@ -35,3 +35,11 @@ div.post-content {
 div.post-body {
     padding-left: 50px;
 }
+
+div.post-tabs {
+    margin-top: 16px;
+}
+div.post-tabs ul.posts {
+    margin: 0px;
+    border-top: none;
+}

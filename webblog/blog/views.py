@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -26,7 +26,13 @@ def index(request):
 			return HttpResponseRedirect('/')
 		else:
 			messages.add_message(request, messages.WARNING, '不能为空')
-	posts = Blog_Articles.objects.order_by('-create_time')
+	show_followed = False
+	if request.user.is_authenticated:
+		show_followed = bool(request.COOKIES.get('show_followed', ''))
+	if show_followed:
+		posts = request.user.followed_posts.order_by('-create_time')
+	else:
+		posts = Blog_Articles.objects.order_by('-create_time')
 	paginator = Paginator(posts, 20)
 	page = request.GET.get('page')
 	try:
@@ -36,7 +42,7 @@ def index(request):
 	except EmptyPage:		# 如果page超过了最大或者最小范围。则跳转到最后一页
 		contacts = paginator.page(paginator.num_pages)
 	form = ArticleForm()
-	return render(request, 'blog/index.html', {'form': form, 'contacts': contacts})
+	return render(request, 'blog/index.html', {'form': form, 'contacts': contacts, 'show_followed': show_followed})
 
 
 # 个人资料页面
@@ -236,7 +242,23 @@ def followed(request, username):
 	try:
 		user = User.objects.get(username=username)
 	except:
-		messages.add_message(request, messages.ERROR, '您所查用的用户不存在')
+		messages.add_message(request, messages.ERROR, '您所查看的用户不存在')
 		return HttpResponseRedirect('/')
 	followed  = FriendShip.objects.filter(followed=user).order_by('-create_time')
 	return render(request, 'blog/followed.html', {'followed': followed, 'user_fol': user})
+
+
+# 查看首页所有的文章
+@login_required(login_url='login')
+def show_all(request):
+	resp = HttpResponseRedirect('/')
+	resp.set_cookie('show_followed', '', max_age=30*24*60*60, path='/')
+	return resp
+
+
+# 查看所关注的文章
+@login_required(login_url='login')
+def show_followed(request):
+	resp = HttpResponseRedirect('/')
+	resp.set_cookie('show_followed', '1', max_age=30*24*60*60)
+	return resp
