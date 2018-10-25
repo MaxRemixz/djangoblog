@@ -6,8 +6,8 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import get_object_or_404
 
-from .forms import ArticleForm, RegisterForm, LoginForm, EditUserForm
-from .models import User, Blog_Articles, FriendShip
+from .forms import ArticleForm, RegisterForm, LoginForm, EditUserForm, CommentForm
+from .models import User, Blog_Articles, FriendShip, Comment
 
 
 # 首页
@@ -153,15 +153,30 @@ def post(request, id):
 		messages.add_message(request, messages.ERROR, '文章不存在！')
 		# raise Http404 等完善了404页面再用这个页面
 		return HttpResponseRedirect('/')
-	return render(request, 'blog/post.html', {'post':post})
+	form = CommentForm()
+	if request.method == 'POST':
+		form = CommentForm(request.POST)
+		if form.is_valid():
+			comment = Comment(body=request.POST['body'], author=request.user, post=post)
+			comment.save()
+			messages.add_message(request, messages.SUCCESS, '评论提交成功')
+			return HttpResponseRedirect('/post/{}'.format(id))
+		else:
+			messages.add_message(request, messages.ERROR, '评论内容不能为空')
+			return HttpResponseRedirect('/post/{}'.format(id))
+	else:
+		comments = Comment.objects.filter(post=post).order_by('-create_time')
+		return render(request, 'blog/post.html', {'post': post, 'form': form, 'comments': comments})
 
 
 # 自定义错误页面
 def page_not_found(request):
 	return render(request, 'blog/404.html')
 
+
 def page_error(request):
 	return render(request, 'blog/500.html')
+
 
 def permission_denied(request):
 	return render(request, 'blog/403.html')
@@ -252,7 +267,7 @@ def followed(request, username):
 @login_required(login_url='login')
 def show_all(request):
 	resp = HttpResponseRedirect('/')
-	resp.set_cookie('show_followed', '', max_age=30*24*60*60, path='/')
+	resp.set_cookie('show_followed', '', max_age=30*24*60*60)
 	return resp
 
 

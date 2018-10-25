@@ -53,6 +53,11 @@
             </a>
             <br>
             {% endif %}
+            <a href="/post/{{ contact.id }}#comments">
+                <span class="label label-primary">
+                    {{ contact.post_comments.count() }} Comments
+                </span>
+            </a>
             <a href="/post/{{ contact.id }}">
                 <span class="label label-default pull-right">Permalink</span>
                 <div class="clearfix"></div>

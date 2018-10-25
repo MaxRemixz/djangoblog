@@ -35,3 +35,8 @@ class EditUserForm(forms.Form):
     phone = forms.CharField(max_length=11)
     birthday = forms.DateField()
     gender = forms.ChoiceField(widget=forms.RadioSelect, choices=gender_choices, label="性别")
+
+
+# 评论输入表单
+class CommentForm(forms.Form):
+    body = forms.CharField(max_length=500, required=True)

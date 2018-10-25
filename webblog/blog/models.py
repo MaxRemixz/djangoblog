@@ -118,3 +118,12 @@ class FriendShip(models.Model):
     follower = models.ForeignKey(User, related_name='follower', verbose_name='关注', on_delete=models.CASCADE)
     create_time = models.DateTimeField(default=datetime.now().strftime("%Y-%m-%d %H:%I:%S"), verbose_name='创建时间')
     objects = models.Manager()
+
+
+class Comment(models.Model):
+    body = models.CharField(max_length=500, verbose_name='内容')
+    create_time = models.DateTimeField(default=datetime.now().strftime("%Y-%m-%d %H:%I:%S"), verbose_name='评论时间')
+    disabled = models.BooleanField(default=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='作者', related_name='author_comments')
+    post = models.ForeignKey(Blog_Articles, on_delete=models.CASCADE, verbose_name='文章', related_name='post_comments')
+    objects = models.Manager()

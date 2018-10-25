@@ -20,4 +20,36 @@
         <div class="post-body">{{ post.body }}</div>
      </li>
 </ul>
+<h4 id="comments">评论</h4>
+{% if user.is_authenticated %}
+<div class="comment-form">
+    <form action="/post/{{ post.id }}" method="post">
+        {{ csrf_input }}
+        <input type="text" name="body" placeholder="请输入您的评论" style="width:40%" class="form-control">
+        <br>
+        <input type="submit" value="提交" class="btn btn-info" style="width: 10%" class="form-control">
+    </form>
+    <ul class="comments">
+        {% for comment in comments %}
+        <li class="comment">
+            <div class="comment-thumbnail">
+                <a href="/user/{{ comment.author.username }}">
+                    <img src="{{ comment.author.gravatar(size=40) }}" alt=""
+                    class="img-rounded profile-thumbnail">
+                </a>
+            </div>
+            <div class="comment-content">
+                <div class="comment-date">{{ comment.create_time }}</div>
+                <div class="comment-author"><a href="/user/{{ comment.author.username }}">
+                    {{ comment.author.username }}
+                </a></div>
+                <div class="comment-body">
+                    {{ comment.body }}
+                </div>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
 {% endblock %}
