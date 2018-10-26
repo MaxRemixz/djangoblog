@@ -35,7 +35,7 @@
                     src="{{ contact.author.gravatar(size=40) }}">
             </a>
         </div>
-        <div class="post-date">{{ contact.create_time }}</div>
+        <div class="post-date">{{ contact.create_time.strftime("%Y-%m-%d %H:%M:%S") }}</div>
         <div class="post-author">
             <a href="/user/{{ contact.author }}">
                 {{ contact.author }}

@@ -17,7 +17,7 @@
                 {{ i.follower.username }}
             </a>
         </td>
-        <td>{{ i.create_time }}</td>
+        <td>{{ i.create_time.strftime("%Y-%m-%d %H:%M:%S") }}</td>
     </tr>
     {% endif %}
     {% endfor %}

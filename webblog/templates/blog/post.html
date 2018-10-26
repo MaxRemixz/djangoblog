@@ -11,7 +11,7 @@
                     src="{{ post.author.gravatar(size=40) }}">
             </a>
         </div>
-        <div class="post-date">{{ post.create_time }}</div>
+        <div class="post-date">{{ post.create_time.strftime("%Y-%m-%d %H:%M:%S") }}</div>
         <div class="post-author">
             <a href="/user/{{ post.author }}">
                 {{ post.author }}
@@ -39,7 +39,7 @@
                 </a>
             </div>
             <div class="comment-content">
-                <div class="comment-date">{{ comment.create_time }}</div>
+                <div class="comment-date">{{ comment.create_time.strftime("%Y-%m-%d %H:%M:%S") }}</div>
                 <div class="comment-author"><a href="/user/{{ comment.author.username }}">
                     {{ comment.author.username }}
                 </a></div>
