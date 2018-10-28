@@ -277,3 +277,36 @@ def show_followed(request):
 	resp = HttpResponseRedirect('/')
 	resp.set_cookie('show_followed', '1', max_age=30*24*60*60)
 	return resp
+
+
+# 管理评论是否显示
+@login_required(login_url='login')
+def moderate(request):
+	comments = Comment.objects.all().order_by('-create_time')
+	paginator = Paginator(comments, 20)
+	page = request.GET.get('page')
+	try:
+		contacts = paginator.page(page)
+	except PageNotAnInteger:  # 如果page不是有一个有效的数字。则跳转到第一页
+		contacts = paginator.page(1)
+	except EmptyPage:		# 如果page超过了最大或者最小范围。则跳转到最后一页
+		contacts = paginator.page(paginator.num_pages)
+	return render(request, 'blog/moderate.html', {'contacts': contacts})
+
+
+# 让评论显示
+@login_required(login_url='login')
+def moderate_enable(request, id):
+	comment = get_object_or_404(Comment, id=id)
+	comment.disabled = False
+	comment.save()
+	return HttpResponseRedirect('/moderate')
+
+
+# 让评论隐藏
+@login_required(login_url='login')
+def moderate_disable(request, id):
+	comment = get_object_or_404(Comment, id=id)
+	comment.disabled = True
+	comment.save()
+	return HttpResponseRedirect('/moderate')

@@ -123,12 +123,12 @@ class FriendShip(models.Model):
 class Comment(models.Model):
     body = models.CharField(max_length=500, verbose_name='内容')
     create_time = models.DateTimeField(default=datetime.now, verbose_name='评论时间')
-    disabled = models.BooleanField(default=True)
+    disabled = models.BooleanField(default=False)
     author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='作者', related_name='author_comments')
     post = models.ForeignKey(Blog_Articles, on_delete=models.CASCADE, verbose_name='文章', related_name='post_comments')
     objects = models.Manager()
 
-    class Meat:
+    class Meta:
         verbose_name = '评论'
         verbose_name_plural = verbose_name
 

@@ -44,8 +44,21 @@
                     {{ comment.author.username }}
                 </a></div>
                 <div class="comment-body">
-                    {{ comment.body }}
+                    {% if comment.disabled %}
+                    <p><i>此评论已经被管理员隐藏</i></p>
+                    {% endif %}
+                    {% if moderate or not comment.disabled %}
+                        {{ comment.body }}
+                    {% endif %}
                 </div>
+                {% if moderate %}
+                    <br>
+                    {% if comment.disabled %}
+                    <a href="/moderate/enable/{{ comment.id }}" class="btn btn-default btn-xs">显示</a>
+                    {% else %}
+                    <a href="/moderate/disable/{{ comment.id }}" class="btn btn-danger btn-xs">隐藏</a>
+                    {% endif %}
+                {% endif %}
             </div>
         </li>
         {% endfor %}

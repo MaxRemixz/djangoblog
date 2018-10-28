@@ -24,4 +24,8 @@ urlpatterns = [
 
 	path('all', views.show_all, name='show_all'),
 	path('followed', views.show_followed, name='show_followed'),
+
+	path('moderate', views.moderate, name='moderate'),
+	path('moderate/enable/<int:id>', views.moderate_enable, name='moderate_enable'),
+	path('moderate/disable/<int:id>', views.moderate_disable, name='moderate_disable'),
 ]

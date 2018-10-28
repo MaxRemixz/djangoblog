@@ -1,0 +1,78 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}Flasky - Comment Moderation{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>Comment Moderation</h1>
+</div>
+{% set moderate = True %}
+<div class="comment-form">
+    <ul class="comments">
+        {% for contact in contacts %}
+        <li class="comment">
+            <div class="comment-thumbnail">
+                <a href="/user/{{ contact.author.username }}">
+                    <img src="{{ contact.author.gravatar(size=40) }}" alt=""
+                    class="img-rounded profile-thumbnail">
+                </a>
+            </div>
+            <div class="comment-content">
+                <div class="comment-date">{{ contact.create_time.strftime("%Y-%m-%d %H:%M:%S") }}</div>
+                <div class="comment-author"><a href="/user/{{ contact.author.username }}">
+                    {{ contact.author.username }}
+                </a></div>
+                <div class="comment-body">
+                    {% if contact.disabled %}
+                    <p><i>此评论已经被管理员隐藏</i></p>
+                    {% endif %}
+                    {% if moderate or not contact.disabled %}
+                        {{ contact.body }}
+                    {% endif %}
+                </div>
+                {% if moderate %}
+                    <br>
+                    {% if contact.disabled %}
+                    <a href="/moderate/enable/{{ contact.id }}" class="btn btn-default btn-xs">显示</a>
+                    {% else %}
+                    <a href="/moderate/disable/{{ contact.id }}" class="btn btn-danger btn-xs">隐藏</a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% if contacts %}
+<div class="pagination">
+    <ul class="pagination">
+        <li{% if not contacts.has_previous() %} class="disabled"{% endif %}>
+            <a href="{% if contacts.has_previous() %}?page={{ contacts.previous_page_number }}{% else %}#{% endif %}">
+                &laquo;
+            </a>
+        </li>
+
+        {% for p in contacts.paginator.page_range %}
+            {% if p %}
+                {% if p == contacts.number %}
+                <li class="active">
+                    <a href="?page={{ p }}">{{ p }}</a>
+                </li>
+                {% else %}
+                <li>
+                    <a href="?page={{ p }}">{{ p }}</a>
+                </li>
+                {% endif %}
+            {% else %}
+            <li class="disabled"><a href="#">&hellip;</a></li>
+            {% endif %}
+        {% endfor %}
+
+        <li{% if not contacts.has_next() %} class="disabled"{% endif %}>
+            <a href="{% if contacts.has_next() %}?page={{ contacts.next_page_number }}
+            {% else %}#{% endif %}">&raquo;</a>
+        </li>
+    </ul>
+</div>
+{% endif %}
+{% endblock %}

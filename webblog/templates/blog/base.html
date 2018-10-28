@@ -24,6 +24,9 @@
                     <li><a href="/register"><span class="glyphicon glyphicon-user"></span> 注册</a></li>
                     <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> 登录</a></li>
                     {% endif %}
+                    {% if request.user.is_superuser %}
+                    <li><a href="/moderate">Moderate Comments</a></li>
+                    {% endif %}
                 </ul>
             </div>
         </nav>
