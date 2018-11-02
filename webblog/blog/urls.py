@@ -1,4 +1,5 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework import routers
 from . import views
 from django.conf.urls import handler403, handler404, handler500
 
@@ -6,6 +7,11 @@ from django.conf.urls import handler403, handler404, handler500
 handler403 = views.permission_denied
 handler404 = views.page_not_found
 handler500 = views.page_error
+
+router = routers.DefaultRouter()
+router.register(r'users', views.UserViewSet)
+router.register(r'blogs', views.BlogViewSet)
+router.register(r'friends', views.FriendViewSet)
 
 urlpatterns = [
 	path('', views.index, name='index'),
@@ -28,4 +34,7 @@ urlpatterns = [
 	path('moderate', views.moderate, name='moderate'),
 	path('moderate/enable/<int:id>', views.moderate_enable, name='moderate_enable'),
 	path('moderate/disable/<int:id>', views.moderate_disable, name='moderate_disable'),
+
+	path(r'api/', include(router.urls)),
+    path(r'api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
